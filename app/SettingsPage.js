@@ -17,6 +17,7 @@ import CTAButton from "../components/CTAButton";
 import LogoutModal from "../components/settings/LogoutModal";
 import SettingsCard from "../components/settings/SettingsCard";
 import SettingsIcon from "../components/settings/SettingsIcon";
+import PrivacyPolicyModal from "../components/settings/PrivacyPolicyModal";
 import UserInfoCard from "../components/settings/UserInfoCard";
 import { useHaptics } from "../context/HapticsContext";
 import { useUser } from "../context/UserContext";
@@ -29,6 +30,7 @@ const SettingsPage = () => {
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
   const [showEmailInput, setShowEmailInput] = useState(false);
   const [email, setEmail] = useState("");
+  const [privacyVisible, setPrivacyVisible] = useState(false);
   const router = useRouter();
   const { enabled, toggleHaptics } = useHaptics();
   const { user, resetUser, updateUser } = useUser();
@@ -136,6 +138,7 @@ const SettingsPage = () => {
         subtitle="Control your data and security settings"
         icon={<SettingsIcon name="shield-checkmark" bgColor={colors.info} />}
         rightContent={<Text style={styles.arrow}>›</Text>}
+        onPress={() => setPrivacyVisible(true)}
       />
 
       {/* Debug */}
@@ -181,6 +184,10 @@ const SettingsPage = () => {
         email={email}
         setEmail={setEmail}
         onLogout={handleLogout}
+      />
+      <PrivacyPolicyModal
+        visible={privacyVisible}
+        onClose={() => setPrivacyVisible(false)}
       />
       <Text style={styles.versionText}>
         {`Version ${version}${buildStage ? ` (${buildStage})` : ""}`}

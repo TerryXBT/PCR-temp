@@ -1,4 +1,5 @@
 import apiConfig from "../../config/apiConfig";
+import { authorizedFetch } from "../apiClient";
 
 /**
  * Fetches challenges for a specific user.
@@ -7,10 +8,10 @@ import apiConfig from "../../config/apiConfig";
  */
 export const fetchUserChallenges = async (ecoId) => {
   try {
-    const url = `${apiConfig.baseURL}/user/${ecoId}/challenge`;
-    console.log("[fetchUserChallenges] URL:", url);
+    const path = `/user/${ecoId}/challenge`;
+    console.log("[fetchUserChallenges] URL:", `${apiConfig.baseURL}${path}`);
 
-    const response = await fetch(url);
+    const response = await authorizedFetch(path, undefined, { ecoId });
     if (!response.ok) throw new Error("Failed to fetch challenges");
 
     const result = await response.json();
@@ -55,24 +56,28 @@ export const completeUserChallenge = async (
   status = 1
 ) => {
   try {
-    const url = `${apiConfig.baseURL}/user/${ecoId}/challenge`;
+    const path = `/user/${ecoId}/challenge`;
     const payload = {
       id: challengeId,
       user_progress: userProgress,
       status,
     };
 
-    // console.log("[completeUserChallenge] URL:", url);
+    // console.log("[completeUserChallenge] URL:", `${apiConfig.baseURL}${path}`);
     // console.log(
     //   "[completeUserChallenge] Payload:",
     //   JSON.stringify(payload, null, 2)
     // );
 
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+    const response = await authorizedFetch(
+      path,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      },
+      { ecoId }
+    );
 
     const text = await response.text();
     console.log("[completeUserChallenge] Raw response text:", text);
@@ -105,19 +110,23 @@ export const activateChallenge = async (
   isActive = true
 ) => {
   try {
-    const url = `${apiConfig.baseURL}/user/${ecoId}/activate-challenge`;
+    const path = `/user/${ecoId}/activate-challenge`;
     const payload = { id: challengeId, isActive };
-    console.log("[activateChallenge] URL:", url);
+    console.log("[activateChallenge] URL:", `${apiConfig.baseURL}${path}`);
     console.log(
       "[activateChallenge] Payload:",
       JSON.stringify(payload, null, 2)
     );
 
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+    const response = await authorizedFetch(
+      path,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      },
+      { ecoId }
+    );
 
     const text = await response.text();
     console.log("[activateChallenge] Raw response text:", text);

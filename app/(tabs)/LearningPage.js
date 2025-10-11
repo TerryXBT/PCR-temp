@@ -21,6 +21,8 @@ import { chunk, PAGE_SIZE } from "../../helpers/paging";
 import colors from "../../theme/colors";
 import layout from "../../theme/layout";
 import { logAnalyticsEvent } from "../../utils/analytics";
+import { useUser } from "../../context/UserContext";
+import { authorizedFetch } from "../../services/apiClient";
 
 const FEATURED_LIMIT = 3;
 const SKELETON_COUNT = 3;
@@ -245,6 +247,7 @@ const LearningPage = () => {
   const [pageByTab, setPageByTab] = useState({ featured: 0, latest: 0 });
   const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
   const pageAnim = useRef(new Animated.Value(1)).current;
+  const { user } = useUser();
 
   const loadArticles = useCallback(async (isRetry = false) => {
     if (isRetry) {
@@ -257,9 +260,14 @@ const LearningPage = () => {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 8000);
-      const response = await fetch(ARTICLE_ENDPOINT, {
-        signal: controller.signal,
-      });
+      const response = await authorizedFetch(
+        ARTICLE_ENDPOINT,
+        { signal: controller.signal },
+        {
+          ecoId: user?.eco_id,
+          skipAuth: !user?.eco_id,
+        }
+      );
       clearTimeout(timeoutId);
 
       if (!response.ok) {
@@ -293,7 +301,7 @@ const LearningPage = () => {
       setExpandedArticleId(null);
       setHasLoadedOnce(true);
     }
-  }, []);
+  }, [user?.eco_id]);
 
   useEffect(() => {
     loadArticles(false);

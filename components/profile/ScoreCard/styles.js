@@ -40,7 +40,7 @@ const base = StyleSheet.create({
 const carbon = StyleSheet.create({
   card: {
     borderRadius: 16,
-    padding: 20,
+    padding: 16,
     marginBottom: 20,
     backgroundColor: colors.neutral.white,
     shadowColor: "#000",
@@ -51,93 +51,34 @@ const carbon = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 16,
+    marginBottom: 12,
   },
   title: {
     fontSize: 16,
     fontWeight: "700",
+    marginLeft: 6,
     color: colors.textPrimary,
   },
   mainRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 16,
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.neutral.gray100,
+    marginBottom: 8,
   },
-  pointsContainer: {
-    flex: 1,
-    justifyContent: "center",
-  },
-  value: {
-    fontSize: 40,
-    fontWeight: "800",
-    color: colors.textPrimary,
-    lineHeight: 48,
-  },
-  pointsLabel: {
-    fontSize: 14,
-    fontWeight: "500",
-    color: colors.textSecondary,
-    marginTop: 4,
-  },
-  stageBadge: {
-    backgroundColor: colors.eco.green[600],
-    paddingHorizontal: 6, // Reduced from 8
-    paddingVertical: 3, // Reduced from 4
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: colors.neutral.white,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 3,
-  },
-  stageBadgeText: {
-    fontSize: 10,
-    fontWeight: "700",
-    color: colors.neutral.white,
-    letterSpacing: 0.5,
-  },
+  left: { flex: 1, justifyContent: "center" },
+  right: { justifyContent: "center", alignItems: "center" },
+  value: { fontSize: 34, fontWeight: "700", color: colors.textPrimary },
+  percentText: { fontSize: 13, fontWeight: "600", color: colors.textSecondary },
   levelRow: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 12,
-    marginBottom: 12,
-  },
-  levelTextContainer: {
-    marginLeft: 6,
-    alignItems: "center",
+    marginTop: 8,
   },
   levelText: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: colors.eco.green[700],
-  },
-  levelSubtitle: {
-    fontSize: 11,
-    fontWeight: "500",
-    color: colors.neutral.gray400, // Lighter grey
-    marginTop: 2,
-  },
-  rewardHint: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.eco.green[50],
-    paddingVertical: 4,
-    paddingHorizontal: 12,
-    borderRadius: 8,
-    marginTop: 4,
-  },
-  rewardText: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: "600",
-    color: colors.eco.green[700],
+    color: colors.eco.purple,
     marginLeft: 6,
   },
 });

@@ -97,7 +97,7 @@ export default StyleSheet.create({
     width: "100%",
     height: 168,
     borderRadius: 16,
-    backgroundColor: colors.neutral.gray50,
+    backgroundColor: "rgba(22, 163, 74, 0.04)",
     paddingHorizontal: 16,
     paddingTop: 24,
     paddingBottom: 16,
@@ -185,27 +185,5 @@ export default StyleSheet.create({
     color: colors.textSecondary,
     textAlign: "center",
     marginTop: 6,
-  },
-  emptyBaseline: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-end",
-    marginTop: 20,
-    width: "100%",
-  },
-  emptyColumn: {
-    alignItems: "center",
-    flex: 1,
-  },
-  emptyIndicator: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: colors.neutral.gray200,
-    marginBottom: 8,
-  },
-  emptyDay: {
-    fontSize: 12,
-    color: colors.textSecondary,
   },
 });

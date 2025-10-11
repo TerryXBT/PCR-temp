@@ -5,15 +5,25 @@ import styles from "./styles";
 import { fetchQuizzes } from "../../../services/apis/quizAPI";
 import colors from "../../../theme/colors";
 import QuizCard from "./QuizCard";
+import { useUser } from "../../../context/UserContext";
 
 const InteractiveQuiz = () => {
   const [topics, setTopics] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { user } = useUser();
 
   useEffect(() => {
     const loadQuizzes = async () => {
       try {
-        const data = await fetchQuizzes();
+        if (!user?.eco_id) {
+          setTopics([]);
+          setLoading(false);
+          return;
+        }
+
+        setLoading(true);
+
+        const data = await fetchQuizzes(user.eco_id);
 
         if (!data || !Array.isArray(data.data)) {
           console.warn("[InteractiveQuiz] No valid data in response", data);
@@ -41,7 +51,7 @@ const InteractiveQuiz = () => {
     };
 
     loadQuizzes();
-  }, []);
+  }, [user?.eco_id]);
 
   return (
     <View style={styles.section}>

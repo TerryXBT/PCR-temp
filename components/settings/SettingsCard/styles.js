@@ -19,6 +19,9 @@ export default StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 6,
   },
+  cardPressed: {
+    opacity: 0.88,
+  },
   iconWrapper: {
     width: 40,
     height: 40,

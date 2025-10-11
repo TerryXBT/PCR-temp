@@ -147,4 +147,32 @@ export default StyleSheet.create({
     elevation: 1,
     opacity: 0.6,
   },
+
+  // Swipe hints at the bottom
+  swipeHints: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "90%",
+    marginTop: 12,
+    paddingHorizontal: 8,
+  },
+
+  hintLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+
+  hintRight: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+
+  hintText: {
+    fontSize: 13,
+    fontWeight: "500",
+    color: "#6B7280",
+  },
 });

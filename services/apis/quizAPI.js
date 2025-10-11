@@ -1,15 +1,20 @@
 import apiConfig from "../../config/apiConfig";
+import { authorizedFetch } from "../apiClient";
 
 /**
  * Fetches all quiz topics and their questions.
  * @returns {Promise<any[]>}
  */
-export const fetchQuizzes = async () => {
+export const fetchQuizzes = async (ecoId, { skipAuth = false } = {}) => {
   try {
-    const url = `${apiConfig.baseURL}${apiConfig.endpoints.quiz}`;
-    console.log("[fetchQuizzes] URL:", url);
+    const path = apiConfig.endpoints.quiz || "/quiz";
+    console.log("[fetchQuizzes] URL:", `${apiConfig.baseURL}${path}`);
 
-    const response = await fetch(url);
+    const response = await authorizedFetch(
+      path,
+      undefined,
+      { ecoId, skipAuth }
+    );
     if (!response.ok) throw new Error("Failed to fetch quizzes");
 
     const result = await response.json();
@@ -41,9 +46,9 @@ export const fetchQuizzes = async () => {
  * @param {number} index - Index in the data array (0-based).
  * @returns {Promise<any>}
  */
-export const fetchQuizByIndex = async (index = 0) => {
+export const fetchQuizByIndex = async (index = 0, ecoId, options) => {
   try {
-    const quizzes = await fetchQuizzes();
+    const quizzes = await fetchQuizzes(ecoId, options);
     return quizzes[index] || null;
   } catch (error) {
     console.error("[quizAPI] fetchQuizByIndex error:", error);

@@ -50,7 +50,7 @@ const ChallengeCard = ({
   };
 
   return (
-    <View style={styles.card}>
+    <Pressable onPress={onInfoPress} style={styles.card}>
       <View style={styles.topRow}>
         <View style={styles.leftColumn}>
           <Pressable onPress={handleTickPress}>
@@ -119,7 +119,7 @@ const ChallengeCard = ({
           }}
         />
       )}
-    </View>
+    </Pressable>
   );
 };
 

@@ -1,4 +1,5 @@
 import apiConfig from "../../config/apiConfig";
+import { authorizedFetch } from "../apiClient";
 import StorageService from "../storage";
 
 /**
@@ -10,8 +11,8 @@ import StorageService from "../storage";
  */
 export const fetchMonthlySnapshot = async (ecoId) => {
   try {
-    const url = `${apiConfig.baseURL}/user/${ecoId}/monthlysnapshot`;
-    const response = await fetch(url);
+    const path = `/user/${ecoId}/monthlysnapshot`;
+    const response = await authorizedFetch(path, undefined, { ecoId });
 
     if (!response.ok) {
       throw new Error("Failed to fetch monthly snapshot");

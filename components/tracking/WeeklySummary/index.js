@@ -43,14 +43,14 @@ const formatNumber = (value) => {
   return '0';
 };
 
-const formatKg = (value) => `${formatNumber(value)}kg CO₂`;
+const formatKg = (value) => `${formatNumber(value)} kg CO₂`;
 
 const WeeklySummary = ({ total = 0, baseline = 0, previous = 0 }) => {
   const weekDelta = total - previous;
   const isIncrease = weekDelta >= 0;
   const absDelta = Math.abs(weekDelta);
   const comparisonText = previous > 0
-    ? `${isIncrease ? '+' : '-'}${formatNumber(absDelta)}kg CO₂ vs last week`
+    ? `${isIncrease ? '+' : '-'}${formatNumber(absDelta)} kg CO₂ vs last week`
     : 'Log a full week to see week-over-week trends.';
   const summaryTitle = previous > 0
     ? isIncrease

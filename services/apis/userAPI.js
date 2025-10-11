@@ -1,16 +1,6 @@
-/**
- * @fileoverview User API functions using Axios.
- * Handles fetching user profile by eco_id.
- */
-
-import axios from "axios";
 import apiConfig from "../../config/apiConfig";
+import { authorizedFetch } from "../apiClient";
 import { handleApiError } from "../../utils/apiErrorHandler";
-
-const api = axios.create({
-  baseURL: apiConfig.baseURL,
-  headers: { "Content-Type": "application/json" },
-});
 
 /**
  * Fetches user profile data by eco_id.
@@ -22,11 +12,25 @@ export async function getUser(ecoId) {
   try {
     console.log("[API] GET /user/:ecoId", ecoId);
 
-    const res = await api.get(`${apiConfig.endpoints.getUser}/${ecoId}`);
+    const path = `${apiConfig.endpoints.getUser}/${ecoId}`;
+    const response = await authorizedFetch(path, undefined, { ecoId });
 
-    console.log("[API] Full Response Data:", JSON.stringify(res.data, null, 2));
+    if (!response.ok) {
+      const errorPayload = await response.text();
+      const error = new Error("Failed to fetch user profile");
+      error.response = {
+        status: response.status,
+        statusText: response.statusText,
+        data: errorPayload,
+      };
+      throw error;
+    }
 
-    const data = res.data?.data;
+    const res = await response.json();
+
+    console.log("[API] Full Response Data:", JSON.stringify(res, null, 2));
+
+    const data = res?.data;
     if (!data?.eco_id) {
       throw new Error("eco_id not found in API response");
     }
@@ -57,9 +61,29 @@ export async function updateUserPoints(ecoId, points) {
       throw new Error("ecoId is required to update user points");
     }
 
-    await api.patch(`${apiConfig.endpoints.getUser}/${ecoId}`, {
-      user_carbon_point: points,
-    });
+    const path = `${apiConfig.endpoints.getUser}/${ecoId}`;
+    const response = await authorizedFetch(
+      path,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_carbon_point: points,
+        }),
+      },
+      { ecoId }
+    );
+
+    if (!response.ok) {
+      const errorPayload = await response.text();
+      const error = new Error("Failed to update user points");
+      error.response = {
+        status: response.status,
+        statusText: response.statusText,
+        data: errorPayload,
+      };
+      throw error;
+    }
   } catch (error) {
     handleApiError(error, "PATCH /user");
     throw error;

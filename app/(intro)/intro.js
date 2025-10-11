@@ -14,6 +14,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { setSeenIntro } from "../../lib/storage/firstRun";
 import colors from "../../theme/colors";
 import { useHapticsUtils } from "../../utils/haptics";
@@ -53,10 +54,12 @@ const SLIDES = [
 export default function IntroPage() {
   const router = useRouter();
   const { hapticPress } = useHapticsUtils();
+  const insets = useSafeAreaInsets();
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef(null);
 
   const isLastSlide = currentIndex === SLIDES.length - 1;
+  const skipTopOffset = Math.max((insets.top || 0) + 12, 40);
 
   const handleNext = async () => {
     await hapticPress();
@@ -112,7 +115,13 @@ export default function IntroPage() {
     <View style={styles.container}>
       {/* Skip button */}
       {!isLastSlide && (
-        <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
+        <TouchableOpacity
+          style={[
+            styles.skipButton,
+            { top: skipTopOffset },
+          ]}
+          onPress={handleSkip}
+        >
           <Text style={styles.skipText}>Skip</Text>
         </TouchableOpacity>
       )}
@@ -150,7 +159,6 @@ const styles = StyleSheet.create({
   },
   skipButton: {
     position: "absolute",
-    top: 50,
     right: 20,
     zIndex: 10,
     paddingVertical: 8,

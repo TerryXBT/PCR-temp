@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 import Swiper from "react-native-deck-swiper";
 import { fetchUserChallenges } from "../../../services/apis/challengeAPI";
-import StorageService from "../../../services/storage";
+import { useUser } from "../../../context/UserContext";
 import { useHapticsUtils } from "../../../utils/haptics";
 import AllChallengesComplete from "../AllChallengesComplete";
 import styles from "./styles";
@@ -28,12 +28,18 @@ const FeaturedChallengeCard = ({ onActivateChallenge, activeCount }) => {
   const [cardIndex, setCardIndex] = useState(0);
   const { hapticSuccess, hapticError } = useHapticsUtils();
   const swiperRef = useRef(null);
+  const { user } = useUser();
 
   useEffect(() => {
     const loadChallenges = async () => {
       try {
-        const user = await StorageService.getUser();
-        if (!user?.eco_id) return;
+        if (!user?.eco_id) {
+          setChallenges([]);
+          setLoading(false);
+          return;
+        }
+
+        setLoading(true);
         const data = await fetchUserChallenges(user.eco_id);
 
         // Do not surface challenges the user already activated.
@@ -65,7 +71,7 @@ const FeaturedChallengeCard = ({ onActivateChallenge, activeCount }) => {
       }
     };
     loadChallenges();
-  }, []);
+  }, [user?.eco_id]);
 
   const handleSwipeRight = async (index) => {
     if (activeCount >= 5) {

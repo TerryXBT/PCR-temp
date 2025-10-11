@@ -44,7 +44,10 @@ const ChallengePage = () => {
   useEffect(() => {
     const loadChallenges = async () => {
       try {
-        if (!user?.eco_id) return;
+        if (!user?.eco_id) {
+          setActiveChallenges([]);
+          return;
+        }
         const data = await fetchUserChallenges(user.eco_id);
         const active = data.filter((c) => c.isActive);
         setActiveChallenges(active);

@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
 import {
   Modal,
   View,
@@ -6,6 +7,8 @@ import {
   TouchableWithoutFeedback,
   Pressable,
 } from "react-native";
+import CTAButton from "../../CTAButton";
+import logger from "../../../utils/logger";
 import styles from "./styles";
 
 /**
@@ -20,8 +23,31 @@ import styles from "./styles";
  * @param {function} props.onClose - Callback to close modal
  * @param {object} props.challenge - Challenge object with title, description, rewards
  */
-const ChallengeDetailsModal = ({ visible, onClose, challenge }) => {
+const ChallengeDetailsModal = ({
+  visible,
+  onClose,
+  challenge,
+  onCompleteChallenge,
+}) => {
+  const [isCompleting, setIsCompleting] = useState(false);
+
   if (!challenge) return null;
+
+  const handleComplete = async () => {
+    if (!challenge || !onCompleteChallenge || isCompleting) return;
+    setIsCompleting(true);
+    try {
+      await onCompleteChallenge(challenge);
+      onClose?.();
+    } catch (error) {
+      logger.error(
+        "[ChallengeDetailsModal] Failed to complete challenge:",
+        error
+      );
+    } finally {
+      setIsCompleting(false);
+    }
+  };
 
   return (
     <Modal
@@ -80,10 +106,18 @@ const ChallengeDetailsModal = ({ visible, onClose, challenge }) => {
                 )}
               </View>
             </View>
-          </Pressable>
-        </View>
-      </TouchableWithoutFeedback>
-    </Modal>
+
+            <View style={styles.actions}>
+              <CTAButton
+                label={isCompleting ? "Completing..." : "Mark as Completed"}
+                onPress={handleComplete}
+                disabled={isCompleting}
+              />
+            </View>
+         </Pressable>
+       </View>
+     </TouchableWithoutFeedback>
+   </Modal>
   );
 };
 

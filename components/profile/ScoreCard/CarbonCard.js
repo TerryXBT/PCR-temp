@@ -4,7 +4,7 @@
  * Adds SharePosterModal integration (top-right share icon).
  */
 
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { useUser } from "../../../context/UserContext";
@@ -38,22 +38,15 @@ const CarbonCard = ({ data }) => {
 
   return (
     <View style={styles.carbon.card}>
-      {/* Header Row */}
       <View style={styles.carbon.header}>
-        {data.icon?.name && (
-          <MaterialIcons
-            name={data.icon.name}
-            size={20}
-            color={colors.eco.yellow}
-          />
-        )}
         <Text style={styles.carbon.title}>{data.title}</Text>
 
-        {/* Share Button (top-right) */}
         <TouchableOpacity
           style={styles.carbon.shareIcon}
           onPress={() => setShowShareModal(true)}
           activeOpacity={0.7}
+          accessibilityRole="button"
+          accessibilityLabel="Share progress"
         >
           <Ionicons
             name="share-outline"
@@ -82,33 +75,21 @@ const CarbonCard = ({ data }) => {
         </TreeRingProgress>
       </View>
 
-      {/* Level row with subtitle */}
-      <View style={styles.carbon.levelRow}>
-        <MaterialIcons name="eco" size={20} color={colors.eco.green[600]} />
-        <View style={styles.carbon.levelTextContainer}>
-          <Text style={styles.carbon.levelText}>
-            {data.level?.text || levelTier.name}
-          </Text>
-          <Text style={styles.carbon.levelSubtitle}>
-            Stage {stage} · {levelTier.min}–
-            {levelTier.max === Infinity ? "∞" : levelTier.max} pts
-          </Text>
-        </View>
+      <View style={styles.carbon.stageRow}>
+        <Text style={styles.carbon.levelText}>
+          {data.level?.text || levelTier.name}
+        </Text>
+        <Text style={styles.carbon.levelSubtitle}>
+          Stage {stage} · {levelTier.min}–
+          {levelTier.max === Infinity ? "∞" : levelTier.max} pts
+        </Text>
       </View>
 
-      {/* Next reward hint） */}
-      {pointsToNextMilestone > 0 && (
-        <View style={styles.carbon.rewardHint}>
-          <MaterialIcons
-            name="emoji-events"
-            size={16}
-            color={colors.eco.green[700]}
-          />
-          <Text style={styles.carbon.rewardText}>
-            Earn {pointsToNextMilestone} pts more to unlock next stage!
-          </Text>
-        </View>
-      )}
+      <Text style={styles.carbon.progressMessage}>
+        {pointsToNextMilestone > 0
+          ? `Earn ${pointsToNextMilestone} pts more to unlock next stage!`
+          : "Stage unlocked! Keep up the momentum."}
+      </Text>
 
       {/* Share Poster Modal */}
       <SharePosterModal

@@ -72,12 +72,6 @@ export const monthlySnapshot = {
     color: "#FFC107",
     text: "Try replacing 2 car trips with cycling for even better progress",
   },
-  badge: {
-    icon: "emoji-events",
-    color: "purple",
-    text: "You’re greener than 65% of users in Melbourne",
-    // highlight: "65%",
-  },
 };
 
 export const profileCTA = {

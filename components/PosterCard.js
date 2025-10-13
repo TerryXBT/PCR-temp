@@ -1,5 +1,5 @@
-import { Platform, StyleSheet, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { Platform, StyleSheet, Text, View } from "react-native";
 import colors from "../theme/colors";
 import { getLevelTier } from "../utils/levelTiers";
 
@@ -27,7 +27,7 @@ const PosterCard = ({
   return (
     <View style={styles.posterContainer}>
       <LinearGradient
-        colors={['#1DA96B', '#A8E6CF']} // Dark green (top) → Light green (bottom)
+        colors={["#1DA96B", "#A8E6CF"]} // Dark green (top) → Light green (bottom)
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
         style={styles.gradient}
@@ -45,9 +45,7 @@ const PosterCard = ({
         <View style={styles.card}>
           {/* Main achievement */}
           <View style={styles.achievementSection}>
-            <Text style={styles.pointsNumber}>
-              {points.toLocaleString()}
-            </Text>
+            <Text style={styles.pointsNumber}>{points.toLocaleString()}</Text>
             <Text style={styles.pointsLabel}>points on Verde</Text>
           </View>
 
@@ -62,22 +60,20 @@ const PosterCard = ({
           {/* CO₂ savings */}
           <View style={styles.co2Section}>
             <Text style={styles.co2Text}>
-              You've saved{" "}
-              <Text style={styles.co2Number}>{co2SavedKg} kg CO₂</Text>{" "}
+              {`${"You've saved"}`}
+              <Text style={styles.co2Number}> {co2SavedKg} kg CO₂</Text>{" "}
               {dateRangeLabel}
             </Text>
           </View>
 
           {/* Divider */}
-          <View style={styles.divider} />
+          {/* <View style={styles.divider} /> */}
 
           {/* CTA footer */}
-          <View style={styles.ctaSection}>
+          {/* <View style={styles.ctaSection}>
             <Text style={styles.ctaText}>Join me on Verde</Text>
-            <Text style={styles.ctaSubtext}>
-              Save CO₂ and earn rewards
-            </Text>
-          </View>
+            <Text style={styles.ctaSubtext}>Save CO₂ and earn rewards</Text>
+          </View> */}
         </View>
 
         {/* Safe zone bottom */}
@@ -90,8 +86,8 @@ const PosterCard = ({
 const styles = StyleSheet.create({
   posterContainer: {
     width: "100%",
-    aspectRatio: 9 / 16, // 9:16 for stories/social media
-    maxWidth: 540, // Max width for optimal quality
+    aspectRatio: 9 / 16,
+    maxWidth: 540,
     alignSelf: "center",
   },
   gradient: {
@@ -105,7 +101,6 @@ const styles = StyleSheet.create({
     height: 60,
   },
 
-  // Header
   header: {
     alignItems: "center",
     marginBottom: 32,

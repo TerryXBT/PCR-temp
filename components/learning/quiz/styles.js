@@ -60,6 +60,11 @@ export default StyleSheet.create({
     color: colors.textSecondary,
     marginTop: 8,
   },
+  cooldownText: {
+    marginTop: 6,
+    fontSize: 12,
+    color: colors.textSecondary,
+  },
   button: {
     borderRadius: 12,
     backgroundColor: colors.eco.green[600],
@@ -67,7 +72,7 @@ export default StyleSheet.create({
     marginTop: 16,
     alignItems: "center",
   },
-  buttonCompleted: {
+  buttonDisabled: {
     backgroundColor: colors.neutral.gray200,
   },
   buttonLabel: {
@@ -75,7 +80,7 @@ export default StyleSheet.create({
     color: colors.neutral.white,
     fontSize: 14,
   },
-  buttonLabelCompleted: {
+  buttonLabelDisabled: {
     color: colors.textSecondary,
   },
 });

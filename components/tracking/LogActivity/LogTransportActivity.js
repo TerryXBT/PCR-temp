@@ -142,7 +142,25 @@ const LogTransportActivity = () => {
 
             const pointsEarned = result?.points ?? 0;
             const awarded = result?.awarded ?? pointsEarned > 0;
-            const message = awarded
+            const awardError = result?.awardError;
+
+            if (awardError) {
+                showFeedbackToast({
+                    variant: 'info',
+                    title: 'Points delayed',
+                    message: 'We saved your transport log, but point awarding failed temporarily. We’ll retry shortly.',
+                });
+            } else if (!awarded) {
+                showFeedbackToast({
+                    variant: 'info',
+                    title: 'Already rewarded',
+                    message: 'Points already awarded for today.',
+                });
+            }
+
+            const message = awardError
+                ? 'Transport log saved. We will add your points shortly.'
+                : awarded
                 ? `You logged today’s Transport. +${pointsEarned} Carbon Points awarded.`
                 : 'You logged today’s Transport. Points already awarded today.';
 

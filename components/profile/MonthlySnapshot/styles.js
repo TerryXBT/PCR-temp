@@ -21,7 +21,7 @@ export default StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 12,
+    marginBottom: 8,
   },
   title: {
     marginLeft: 8,
@@ -29,40 +29,11 @@ export default StyleSheet.create({
     fontWeight: "600",
     color: colors.textPrimary,
   },
-  performanceBox: {
-    backgroundColor: colors.successTint,
-    borderRadius: 12,
-    padding: 12,
-    marginBottom: 16,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  performanceTitle: {
-    fontSize: 13,
-    fontWeight: "600",
-    color: colors.textPrimary,
-    marginBottom: 4,
-  },
-  performanceSub: {
-    fontSize: 12,
-    color: colors.textSecondary,
-  },
-  performanceRight: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  performanceChange: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: colors.success,
-    marginLeft: 4,
-  },
   sectionTitle: {
     fontSize: 13,
     fontWeight: "600",
     color: colors.textPrimary,
-    marginBottom: 8,
+    marginBottom: 6,
   },
   sourceRow: {
     flexDirection: "row",
@@ -93,30 +64,12 @@ export default StyleSheet.create({
     backgroundColor: colors.infoTint,
     borderRadius: 12,
     padding: 12,
-    marginTop: 12,
+    marginTop: 10,
   },
   tipText: {
     marginLeft: 8,
     fontSize: 13,
     color: colors.textSecondary,
     flex: 1,
-  },
-  badgeBox: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: colors.purpleTint,
-    borderRadius: 12,
-    padding: 12,
-    marginTop: 12,
-  },
-  badgeText: {
-    marginLeft: 8,
-    fontSize: 13,
-    color: colors.textPrimary,
-    flex: 1,
-  },
-  highlight: {
-    fontWeight: "700",
-    color: colors.purple,
   },
 });

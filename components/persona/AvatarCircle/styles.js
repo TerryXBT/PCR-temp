@@ -39,16 +39,4 @@ export default StyleSheet.create({
     color: colors.neutral.white,
     fontWeight: "600",
   },
-  badge: {
-    position: "absolute",
-    top: -6,
-    right: -6,
-    backgroundColor: colors.neutral.white,
-    borderRadius: 16,
-    padding: 4,
-    shadowColor: "#000",
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 4,
-  },
 });

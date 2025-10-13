@@ -14,6 +14,18 @@ type User = {
   personaStage?: "leaf" | "sapling" | "tree";
 };
 
+type QuizAwardPayload = {
+  ecoId: string;
+  quizId: string;
+  correct: number;
+  total: number;
+  awardedPoints: number;
+  idempotencyKey: string;
+  endpoint?: string;
+};
+
+type QuizCooldownMap = Record<string, number>;
+
 class StorageService {
   // ---------- USER ----------
   /**
@@ -202,6 +214,130 @@ class StorageService {
     }
   }
 
+  // ---------- QUIZ AWARDS ----------
+  static async getQuizAwardQueue(): Promise<QuizAwardPayload[]> {
+    try {
+      const raw = await AsyncStorage.getItem("quizAwardQueue");
+      return raw ? (JSON.parse(raw) as QuizAwardPayload[]) : [];
+    } catch (err) {
+      console.error("[StorageService] getQuizAwardQueue error:", err);
+      return [];
+    }
+  }
+
+  static async setQuizAwardQueue(queue: QuizAwardPayload[]): Promise<void> {
+    try {
+      await AsyncStorage.setItem("quizAwardQueue", JSON.stringify(queue));
+    } catch (err) {
+      console.error("[StorageService] setQuizAwardQueue error:", err);
+    }
+  }
+
+  static async enqueueQuizAward(payload: QuizAwardPayload): Promise<void> {
+    try {
+      const queue = await StorageService.getQuizAwardQueue();
+      const deduped = queue.filter(
+        (item) => item.idempotencyKey !== payload.idempotencyKey
+      );
+      deduped.push(payload);
+      await StorageService.setQuizAwardQueue(deduped);
+    } catch (err) {
+      console.error("[StorageService] enqueueQuizAward error:", err);
+    }
+  }
+
+  static async removeQuizAward(idempotencyKey: string): Promise<void> {
+    try {
+      const queue = await StorageService.getQuizAwardQueue();
+      const filtered = queue.filter(
+        (item) => item.idempotencyKey !== idempotencyKey
+      );
+      await StorageService.setQuizAwardQueue(filtered);
+    } catch (err) {
+      console.error("[StorageService] removeQuizAward error:", err);
+    }
+  }
+
+  // ---------- QUIZ COOLDOWN ----------
+  static async getQuizCooldownMap(): Promise<QuizCooldownMap> {
+    try {
+      const raw = await AsyncStorage.getItem("quizCooldowns");
+      if (!raw) return {};
+      const parsed = JSON.parse(raw);
+      return typeof parsed === "object" && parsed !== null ? parsed : {};
+    } catch (err) {
+      console.error("[StorageService] getQuizCooldownMap error:", err);
+      return {};
+    }
+  }
+
+  static async setQuizCooldownMap(map: QuizCooldownMap): Promise<void> {
+    try {
+      await AsyncStorage.setItem("quizCooldowns", JSON.stringify(map));
+    } catch (err) {
+      console.error("[StorageService] setQuizCooldownMap error:", err);
+    }
+  }
+
+  static async getQuizCompletionTimestamp(quizId: string): Promise<number | null> {
+    if (!quizId) return null;
+    try {
+      const map = await StorageService.getQuizCooldownMap();
+      const value = map[quizId];
+      return typeof value === "number" ? value : null;
+    } catch (err) {
+      console.error("[StorageService] getQuizCompletionTimestamp error:", err);
+      return null;
+    }
+  }
+
+  static async setQuizCompletionTimestamp(
+    quizId: string,
+    timestamp: number = Date.now()
+  ): Promise<void> {
+    if (!quizId) return;
+    try {
+      const map = await StorageService.getQuizCooldownMap();
+      map[quizId] = timestamp;
+      await StorageService.setQuizCooldownMap(map);
+    } catch (err) {
+      console.error("[StorageService] setQuizCompletionTimestamp error:", err);
+    }
+  }
+
+  static async clearQuizCompletionTimestamp(quizId: string): Promise<void> {
+    if (!quizId) return;
+    try {
+      const map = await StorageService.getQuizCooldownMap();
+      if (map[quizId] !== undefined) {
+        delete map[quizId];
+        await StorageService.setQuizCooldownMap(map);
+      }
+    } catch (err) {
+      console.error("[StorageService] clearQuizCompletionTimestamp error:", err);
+    }
+  }
+
+  static async isQuizOnCooldown(
+    quizId: string,
+    windowMs: number = 24 * 60 * 60 * 1000
+  ): Promise<boolean> {
+    if (!quizId) return false;
+    try {
+      const timestamp = await StorageService.getQuizCompletionTimestamp(quizId);
+      if (!timestamp) return false;
+      const elapsed = Date.now() - timestamp;
+      if (elapsed < windowMs) {
+        return true;
+      }
+      await StorageService.clearQuizCompletionTimestamp(quizId);
+      return false;
+    } catch (err) {
+      console.error("[StorageService] isQuizOnCooldown error:", err);
+      return false;
+    }
+  }
+
   // ---------- FLAGS ----------
   static async getHasSeenSwipeOverlay(): Promise<boolean> {
     try {
@@ -234,6 +370,8 @@ class StorageService {
         "personaStage",
         "challenges",
         "monthlySnapshot",
+        "quizAwardQueue",
+        "quizCooldowns",
       ]);
     } catch (err) {
       console.error("[StorageService] clearUserData error:", err);

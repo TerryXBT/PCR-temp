@@ -30,6 +30,7 @@ const apiConfig = {
     baseline: "/baseline",
     getUser: "/user",
     quiz: "/quiz",
+    rewards: "/rewards",
   },
 };
 

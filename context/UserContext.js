@@ -10,15 +10,27 @@ import StorageService from "../services/storage";
 const UserContext = createContext(null);
 
 /**
- * Derives persona stage from carbon points.
+ * Derives persona stage from carbon points based on levelTiers.
+ * Maps 7 animation stages to the tier system:
+ * - seed: Seedling (0-99)
+ * - leaf: Sprout (100-249)
+ * - sapling: Young Sapling (250-499)
+ * - youngPlant: Eco Warrior (500-749)
+ * - tree: Forest Guardian (750-999)
+ * - matureTree: Blooming Grove (1000-1999)
+ * - finalStage: Earth Ally+ (2000+)
  *
  * @param {number} carbonPoints - Current user carbon points.
- * @returns {"leaf"|"sapling"|"tree"} Persona stage string.
+ * @returns {"seed"|"leaf"|"sapling"|"youngPlant"|"tree"|"matureTree"|"finalStage"} Persona stage string.
  */
 const derivePersonaStage = (carbonPoints) => {
-  if (!carbonPoints || carbonPoints <= 100) return "leaf";
-  if (carbonPoints <= 500) return "sapling";
-  return "tree";
+  if (!carbonPoints || carbonPoints <= 99) return "seed";
+  if (carbonPoints <= 249) return "leaf";
+  if (carbonPoints <= 499) return "sapling";
+  if (carbonPoints <= 749) return "youngPlant";
+  if (carbonPoints <= 999) return "tree";
+  if (carbonPoints <= 1999) return "matureTree";
+  return "finalStage";
 };
 
 /**

@@ -51,13 +51,16 @@ const carbon = StyleSheet.create({
   header: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: 12,
   },
   title: {
     fontSize: 16,
     fontWeight: "700",
-    marginLeft: 6,
     color: colors.textPrimary,
+  },
+  shareIcon: {
+    padding: 4,
   },
   mainRow: {
     flexDirection: "row",
@@ -69,17 +72,26 @@ const carbon = StyleSheet.create({
   right: { justifyContent: "center", alignItems: "center" },
   value: { fontSize: 34, fontWeight: "700", color: colors.textPrimary },
   percentText: { fontSize: 13, fontWeight: "600", color: colors.textSecondary },
-  levelRow: {
-    flexDirection: "row",
-    justifyContent: "center",
+  stageRow: {
+    marginTop: 12,
     alignItems: "center",
-    marginTop: 8,
   },
   levelText: {
     fontSize: 14,
     fontWeight: "600",
     color: colors.eco.purple,
-    marginLeft: 6,
+  },
+  levelSubtitle: {
+    fontSize: 13,
+    color: colors.textSecondary,
+    marginTop: 4,
+    textAlign: "center",
+  },
+  progressMessage: {
+    marginTop: 16,
+    fontSize: 15,
+    color: colors.textSecondary,
+    textAlign: "center",
   },
 });
 

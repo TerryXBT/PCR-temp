@@ -21,20 +21,6 @@ const MonthlySnapshot = ({ data }) => {
         <Text style={styles.title}>Your Snapshot</Text>
       </View>
 
-      {/* Performance Box */}
-      <View style={styles.performanceBox}>
-        <View>
-          <Text
-            style={styles.performanceTitle}
-          >{`${"vs Melbourne's Average"}`}</Text>
-          {/* <Text style={styles.performanceSub}></Text> */}
-        </View>
-        <View style={styles.performanceRight}>
-          <MaterialIcons name="arrow-downward" size={16} color="green" />
-          <Text style={styles.performanceChange}>-12%</Text>
-        </View>
-      </View>
-
       {/* Top Emission Sources */}
       <Text style={styles.sectionTitle}>Top Emission Sources</Text>
       <EmissionSourceList data={data} />
@@ -44,14 +30,6 @@ const MonthlySnapshot = ({ data }) => {
         <MaterialIcons name="lightbulb-outline" size={20} color="#FFC107" />
         <Text style={styles.tipText}>
           Try replacing 2 car trips with cycling for even better progress
-        </Text>
-      </View>
-
-      {/* Badge Box */}
-      <View style={styles.badgeBox}>
-        <MaterialIcons name="emoji-events" size={20} color="purple" />
-        <Text style={styles.badgeText}>
-          You’re greener than 65% of users in Melbourne
         </Text>
       </View>
     </View>

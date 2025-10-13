@@ -1,6 +1,6 @@
 /**
  * @fileoverview PersonaCard component.
- * Displays the user’s carbon persona with an icon and stage-specific label.
+ * Displays the user's carbon persona with an icon and stage-specific label.
  */
 
 import { Ionicons } from "@expo/vector-icons";
@@ -12,7 +12,7 @@ import styles from "./styles";
 /**
  * PersonaCard
  *
- * Displays the persona stage based on user progress (leaf, sapling, tree).
+ * Displays the persona stage based on user progress (seed, leaf, sapling, youngPlant, tree, matureTree, finalStage).
  *
  * @returns {JSX.Element}
  */
@@ -20,18 +20,26 @@ const PersonaCard = () => {
   const { user } = useUser();
 
   const personaLabels = {
-    leaf: "Eco Seedling",
+    seed: "Eco Seedling",
+    leaf: "Eco Sprout",
     sapling: "Eco Explorer",
+    youngPlant: "Eco Grower",
     tree: "Eco Warrior",
+    matureTree: "Forest Guardian",
+    finalStage: "Climate Champion",
   };
 
-  const stage = user?.personaStage || "leaf";
+  const stage = user?.personaStage || "seed";
   const label = personaLabels[stage];
 
   const iconMap = {
+    seed: "leaf",
     leaf: "leaf",
     sapling: "leaf-outline",
+    youngPlant: "leaf-outline",
     tree: "tree-outline",
+    matureTree: "tree-outline",
+    finalStage: "planet",
   };
 
   return (

@@ -13,6 +13,7 @@ import layout from "../../theme/layout";
 import { useUser } from "../../context/UserContext";
 import { fetchMonthlySnapshot } from "../../services/apis/monthlySnapshotAPI";
 import { avatar } from "../../services/profileData";
+import { getLevelTier } from "../../utils/levelTiers";
 
 /**
  * ProfilePage
@@ -53,6 +54,11 @@ const ProfilePage = () => {
     loadSnapshot();
   }, [user?.eco_id]);
 
+  // Get current level tier name dynamically
+  const currentLevelTier = user?.carbonPoints
+    ? getLevelTier(user.carbonPoints)
+    : getLevelTier(0);
+
   return (
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       <ScrollView contentContainerStyle={styles.container}>
@@ -71,12 +77,11 @@ const ProfilePage = () => {
             data={{
               title: "Growth Journey",
               value: user.carbonPoints,
-              progress: user.carbonPoints / 1000,
+              progress: user.carbonPoints / 5000,
               icon: { name: "eco" },
               level: {
                 icon: { name: "star" },
-                text:
-                  user.carbonPoints >= 500 ? "Eco Warrior" : "Getting Started",
+                text: currentLevelTier.name,
               },
             }}
           />

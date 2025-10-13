@@ -13,7 +13,7 @@ import { useRouter } from 'expo-router';
 import CTAButton from '../../CTAButton';
 import { useTracking } from '../../../context/TrackingContext';
 import colors from '../../../theme/colors';
-import { showRewardToast } from '../../../utils/toast';
+import { showFeedbackToast, showRewardToast } from '../../../utils/toast';
 
 const ENERGY_NOTE =
   'Energy records reflect long-term consumption patterns. Their carbon footprint is applied to your overall progress, not the daily chart.';
@@ -59,7 +59,25 @@ const LogEnergyActivity = () => {
       const result = await logEnergyActivity({ electricityValue, gasValue });
       const pointsEarned = result?.points ?? 0;
       const awarded = result?.awarded ?? pointsEarned > 0;
-      const message = awarded
+      const awardError = result?.awardError;
+
+      if (awardError) {
+        showFeedbackToast({
+          variant: 'info',
+          title: 'Points delayed',
+          message: 'We saved your energy log, but point awarding failed temporarily. We’ll retry shortly.',
+        });
+      } else if (!awarded) {
+        showFeedbackToast({
+          variant: 'info',
+          title: 'Already rewarded',
+          message: 'Energy points already awarded this month.',
+        });
+      }
+
+      const message = awardError
+        ? 'Energy usage saved. We will add your points shortly.'
+        : awarded
         ? `Energy usage saved. +${pointsEarned} Carbon Points awarded.`
         : 'Energy usage saved. Monthly points already awarded.';
 

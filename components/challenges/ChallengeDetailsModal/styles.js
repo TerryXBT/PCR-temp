@@ -67,4 +67,7 @@ export default StyleSheet.create({
     fontWeight: "600",
     color: "#16A34A",
   },
+  actions: {
+    marginTop: 12,
+  },
 });

@@ -29,6 +29,8 @@ import { showFeedbackToast } from "../../utils/toast";
  *
  * @returns {JSX.Element}
  */
+const MAX_ACTIVE_CHALLENGES = 5;
+
 const ChallengePage = () => {
   const [activeChallenges, setActiveChallenges] = useState([]);
   const [hasCompletedAny, setHasCompletedAny] = useState(false);
@@ -37,6 +39,19 @@ const ChallengePage = () => {
 
   const [selectedChallenge, setSelectedChallenge] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    setSelectedChallenge(null);
+  };
+
+  const notifyMaxActiveLimit = () => {
+    showFeedbackToast({
+      variant: 'info',
+      title: 'Limit reached',
+      message: 'You already have 5 active challenges. Complete one to add more.',
+    });
+  };
 
   /**
    * Load active challenges from API on mount or when user changes.
@@ -67,6 +82,10 @@ const ChallengePage = () => {
    */
   const handleActivateChallenge = async (challenge) => {
     try {
+      if (activeChallenges.length >= MAX_ACTIVE_CHALLENGES) {
+        notifyMaxActiveLimit();
+        return;
+      }
       if (!user?.eco_id) {
         showFeedbackToast({
           variant: 'info',
@@ -169,25 +188,32 @@ const ChallengePage = () => {
           <FeaturedChallengeCard
             onActivateChallenge={handleActivateChallenge}
             activeCount={activeChallenges.length}
+            onMaxActiveLimitReached={notifyMaxActiveLimit}
           />
         </View>
 
         <View style={styles.activeSection}>
-          <Text style={styles.sectionTitle}>Active Challenges</Text>
+          <Text style={styles.sectionTitle}>
+            Active Challenges ({activeChallenges.length}/{MAX_ACTIVE_CHALLENGES})
+          </Text>
+          <Text style={styles.sectionSubtitle}>
+            {activeChallenges.length >= MAX_ACTIVE_CHALLENGES
+              ? 'Complete a challenge to free up a slot.'
+              : `You can add ${MAX_ACTIVE_CHALLENGES - activeChallenges.length} more challenge${
+                  MAX_ACTIVE_CHALLENGES - activeChallenges.length === 1 ? '' : 's'
+                }.`}
+          </Text>
           {activeChallenges.length > 0
             ? activeChallenges.map((challenge) => (
                 <View key={challenge.id} style={styles.cardWrapper}>
                   <ChallengeCard
-                    id={challenge.id}
                     title={challenge.title}
                     initialProgress={challenge.progress?.current || 0}
                     total={challenge.progress?.target || 1}
-                    rewards={challenge.rewards}
                     onInfoPress={() => {
                       setSelectedChallenge(challenge);
                       setModalVisible(true);
                     }}
-                    onComplete={handleCompleteChallenge}
                   />
                 </View>
               ))
@@ -206,8 +232,9 @@ const ChallengePage = () => {
 
       <ChallengeDetailsModal
         visible={modalVisible}
-        onClose={() => setModalVisible(false)}
+        onClose={handleCloseModal}
         challenge={selectedChallenge}
+        onCompleteChallenge={handleCompleteChallenge}
       />
     </View>
   );
@@ -237,9 +264,14 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: "600",
-    marginBottom: layout.cardSpacing,
+    marginBottom: layout.cardSpacing / 2,
     marginTop: layout.sectionSpacing,
     color: colors.textPrimary,
+  },
+  sectionSubtitle: {
+    fontSize: 13,
+    color: colors.textSecondary,
+    marginBottom: layout.cardSpacing,
   },
   cardWrapper: {
     marginBottom: layout.cardSpacing,

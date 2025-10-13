@@ -12,7 +12,7 @@ import { useRouter } from 'expo-router';
 import CTAButton from '../../CTAButton';
 import { useTracking } from '../../../context/TrackingContext';
 import colors from '../../../theme/colors';
-import { showRewardToast } from '../../../utils/toast';
+import { showFeedbackToast, showRewardToast } from '../../../utils/toast';
 
 const SHOPPING_SECTIONS = [
   {
@@ -66,11 +66,29 @@ const LogShoppingActivity = () => {
       const result = await logShoppingActivity({ entries });
       const pointsEarned = result?.points ?? 0;
       const awarded = result?.awarded ?? pointsEarned > 0;
-      const message = awarded
-        ? `You logged today’s Shopping. +${pointsEarned} Carbon Points awarded.`
-        : 'You logged today’s Shopping. Points already awarded today.';
+      const awardError = result?.awardError;
 
       setSelectedOptions({});
+
+      if (awardError) {
+        showFeedbackToast({
+          variant: 'info',
+          title: 'Points delayed',
+          message: 'We saved your shopping log, but point awarding failed temporarily. We’ll retry shortly.',
+        });
+      } else if (!awarded) {
+        showFeedbackToast({
+          variant: 'info',
+          title: 'Already rewarded',
+          message: 'Points already awarded for today.',
+        });
+      }
+
+      const message = awardError
+        ? 'Shopping log saved. We will add your points shortly.'
+        : awarded
+        ? `You logged today’s Shopping. +${pointsEarned} Carbon Points awarded.`
+        : 'You logged today’s Shopping. Points already awarded today.';
 
       showRewardToast({
         category: 'shopping',

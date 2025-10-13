@@ -5,6 +5,8 @@
  * LAYOUT FIX: Uses useSafeAreaInsets() to prevent first-render positioning bugs
  */
 
+import { Ionicons } from "@expo/vector-icons";
+import * as Sharing from "expo-sharing";
 import { useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -18,13 +20,11 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Ionicons } from "@expo/vector-icons";
-import { captureRef } from "react-native-view-shot";
-import * as Sharing from "expo-sharing";
 import Toast from "react-native-toast-message";
+import { captureRef } from "react-native-view-shot";
 
-import PosterCard from "../../PosterCard";
 import colors from "../../../theme/colors";
+import PosterCard from "../../PosterCard";
 
 const HEADER_HEIGHT = 52; // Fixed header content height
 
@@ -121,14 +121,25 @@ const SharePosterModal = ({
           style={[
             styles.headerContainer,
             {
-              paddingTop: insets.top > 0 ? insets.top : Platform.OS === 'ios' ? 44 : 0,
-              height: (insets.top > 0 ? insets.top : Platform.OS === 'ios' ? 44 : 0) + HEADER_HEIGHT,
-            }
+              paddingTop:
+                insets.top > 0 ? insets.top : Platform.OS === "ios" ? 44 : 0,
+              height:
+                (insets.top > 0 ? insets.top : Platform.OS === "ios" ? 44 : 0) +
+                HEADER_HEIGHT,
+            },
           ]}
         >
           <View style={styles.headerContent}>
-            <TouchableOpacity onPress={onClose} style={styles.backButton} activeOpacity={0.6}>
-              <Ionicons name="arrow-back" size={26} color={colors.neutral.gray900} />
+            <TouchableOpacity
+              onPress={onClose}
+              style={styles.backButton}
+              activeOpacity={0.6}
+            >
+              <Ionicons
+                name="arrow-back"
+                size={26}
+                color={colors.neutral.gray900}
+              />
               <Text style={styles.backText}>Back</Text>
             </TouchableOpacity>
           </View>
@@ -157,7 +168,7 @@ const SharePosterModal = ({
         <View
           style={[
             styles.footerContainer,
-            { paddingBottom: insets.bottom > 0 ? insets.bottom : 16 }
+            { paddingBottom: insets.bottom > 0 ? insets.bottom : 16 },
           ]}
         >
           <TouchableOpacity
@@ -172,11 +183,11 @@ const SharePosterModal = ({
             {isSharing ? (
               <ActivityIndicator color={colors.neutral.white} size="small" />
             ) : (
-              <Text style={styles.shareButtonText}>Share Poster 📤</Text>
+              <Text style={styles.shareButtonText}>Share</Text>
             )}
           </TouchableOpacity>
           <Text style={styles.footerHint}>
-            Share your achievement on Instagram, Twitter, or anywhere!
+            Share your achievement on the socials
           </Text>
         </View>
       </View>
@@ -195,7 +206,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.neutral.white,
     borderBottomWidth: 1,
     borderBottomColor: colors.neutral.gray200,
-    justifyContent: 'flex-end', // Push content to bottom of safe area
+    justifyContent: "flex-end", // Push content to bottom of safe area
     zIndex: 10,
   },
   headerContent: {
